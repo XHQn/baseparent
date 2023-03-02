@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="saasMode" />
+        <module name="commonTool" />
+        <module name="ssoAuth" />
+        <module name="importData" />
+        <module name="authSecurity" />
+        <module name="baseCommon" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="authSecurity" options="-parameters" />
+      <module name="baseCommon" options="-parameters" />
+      <module name="baseparent" options="" />
+      <module name="commonTool" options="-parameters" />
+      <module name="importData" options="-parameters" />
+      <module name="saasMode" options="-parameters" />
+      <module name="ssoAuth" options="-parameters" />
+    </option>
+  </component>
+</project>

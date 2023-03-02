@@ -1,0 +1,13 @@
+#服务配置
+server:
+  port: 9001
+#spring配置
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  #2.数据库连接池
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/saasmode?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: esd

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auth.mapper.SystemRoleMapper">
+    <select id="selectRoleWithPermission" resultMap="rolePermissionDTO" parameterType="java.lang.String">
+        select system_role.*,
+               system_role_permission.permission_id,
+               system_permission.name as permissionname,
+               system_permission.description as permissiondescription,
+               system_permission.code,
+               system_permission.type,
+               system_permission.pid,
+               system_permission.en_visible
+
+        from system_permission,system_role,system_role_permission
+
+        where system_permission.id=system_role_permission.permission_id
+
+          and system_role.id=system_role_permission.role_id
+
+          and system_role.id=#{roleId}
+    </select>
+    <resultMap id="rolePermissionDTO" type="com.auth.pojo.RolePermissionDTO">
+        <result property="id" column="id"></result>
+        <result property="description" column="description"></result>
+        <result property="name" column="name"></result>
+        <result property="companyId" column="company_id"></result>
+        <collection property="systemPermissionList" ofType="com.auth.pojo.SystemPermission" javaType="java.util.List">
+            <result property="id" column="permission_id"></result>
+            <result property="name" column="permissionname"></result>
+            <result property="description" column="permissindescription"></result>
+            <result property="code" column="code"></result>
+            <result property="type" column="type"></result>
+            <result property="pid" column="pid"></result>
+            <result property="enVisible" column="en_visible"></result>
+        </collection>
+    </resultMap>
+</mapper>

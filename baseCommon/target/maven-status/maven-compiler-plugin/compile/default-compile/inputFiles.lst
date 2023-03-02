@@ -1,0 +1,14 @@
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\readPropFile\ReadProp.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\entity\Result.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\controller\BaseController.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\entity\PageResult.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\service\BaseService.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\readPropFile\PropertiesUtils.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\entity\ResultCode.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\util\WebUtils.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\dao\BaseDao.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\dao\BaseDaoImpl.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\customCondition\DefaultLoadCondition.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\jwt\JwtUtil.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\exception\CommonException.java
+D:\c\baseparent\baseCommon\src\main\java\com\baseCommon\handler\BaseExceptionHandler.java

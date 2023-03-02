@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--导入thymeleaf的名称空间-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <title>供应热力合同</title>
+    <!-- 引入 layui.css -->
+    <link href="/bootstrap/layui/css/layui.css" rel="stylesheet">
+    <!-- 引入 layui.js -->
+    <script src="/bootstrap/layui/layui.js"></script>
+    <style type="text/css">
+        .signImage{
+            height: 72px;
+            width: 76px;
+            margin: 0px 0px 20px 0px;
+            -webkit-transform: rotate(270deg);
+            -moz-transform: rotate(270deg);
+            -o-transform: rotate(270deg);
+            -ms-transform: rotate(270deg);
+            transform: rotate(270deg);
+        }
+
+    </style>
+</head>
+<body style="margin-top: 15px">
+    <form class="layui-form" id="formId" action="">
+        <input id="customdes" name="customdes" style="display: none" type="text">
+        <input name="customcode" id="customcode" style="display: none" th:type="text" th:value="${heatingCard}">
+        <input name="contractfilename" id="contractfilename" style="display: none" type="text"  >
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话号码</label>
+            <div class="layui-input-block">
+                <input id="telephone" name="telephone" style="width: 80%"  type="text" required  lay-verify="required" placeholder="电话号码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">身 份 证</label>
+            <div class="layui-input-block">
+                <input id="identitycode" name="identitycode" style="width: 80%" type="text" required  lay-verify="required" placeholder="身份证" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="padding-top:26px " >签字图片</label>
+            <div class="layui-input-block">
+                <img class="signImage" id="sign_images" src="/bootstrap/image/zanwuqianming.png">
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center;">
+            <a href="javascript:void(0)" style="color: red" onclick="getContract()" >查看合同</a>
+        </div>
+        <div class="layui-form-item">
+            <div style="text-align: center">
+                <a onclick="sign()" class="layui-btn layui-btn-radius layui-btn-primary">签字</a>
+                <a onclick="submitSign()" class="layui-btn layui-btn-radius layui-btn-normal"
+                >提交</a>
+            </div>
+        </div>
+    </form>
+    <script src="/bootstrap/js/jquery.min.js"></script>
+    <script src="/bootstrap/layer/layer.js"></script>
+    <script type="text/javascript">
+        var $;
+        $ = layui.jquery;
+        $(function(){
+            getDetails($("#customcode").val());
+        })
+
+        function sign(){
+            var index = layer.open({
+                type: 2,
+                title:"签字",
+                area: ['100%', '100%'],
+                content: ['/sign/getSignPage', 'no'] //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+            });
+        }
+        function getContract() {
+            var index = layer.open({
+                type: 2,
+                title:"热力合同",
+                area: ['100%', '100%'],
+                content: ['/sign/getHeatContract'] //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+            });
+        }
+        function getDetails(heatingCard) {
+            $.ajax({
+                url:"/sign/getDetailsByHeatingCard/"+heatingCard,
+                type:"get",
+                Accept:"html/text;chatset=utf-8",
+                contentType:false,
+                success: function (data) {
+                    console.log(data);
+                    var json_data = $.parseJSON(data);
+                    var json_array = json_data.RESULT_DATA;
+                    $("#telephone").val(json_array[0].Telephone);
+                    $("#identitycode").val(json_array[0].IdentityCode );
+                    $("#customdes").val(json_array[0].CustomDes);
+
+                    console.log(data);
+                }, error: function () {
+                    console.log("上传失败！");
+                }
+            })
+        }
+        
+        function submitSign() {
+            var fields = $('#formId').serializeArray();
+            var obj = {}; //声明一个对象
+            $.each(fields, function(index, field) {
+                obj[field.name] = field.value; //通过变量，将属性值，属性一起放到对象中
+            })
+            console.log(obj)
+            $.ajax({
+                url:"/sign/updateDetailsByHeatingCard/",
+                type:"put",
+                dataType: "json",
+                contentType: "application/json;charset=utf8",
+                data: JSON.stringify(obj),
+                success: function (data) {
+                    if(data.RESULT_DATA[0].Flag == 1){
+                        layer.msg("保存成功！");
+                    }else{
+                        layer.msg("保存失败！");
+                    }
+                }, error: function () {
+                    console.log("提交失败！");
+                }
+            })
+        }
+
+    </script>
+</body>
+</html>

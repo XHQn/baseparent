@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.init.InitConfig
+#org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter=\
+#com.initConfig.oauth2client.PhoneConfigurer

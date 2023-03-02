@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>热力合同</title>
+	<link rel="stylesheet" type="text/css" href="/bootstrap/css/public.css" />
+	<style type="text/css">
+		.signImage{
+			height: 72px;
+			width: 76px;
+			margin: 0px 0px 20px 0px;
+			-webkit-transform: rotate(270deg);
+			-moz-transform: rotate(270deg);
+			-o-transform: rotate(270deg);
+			-ms-transform: rotate(270deg);
+			transform: rotate(270deg);
+		}
+
+	</style>
+</head>
+<body>
+	<div class="flex-column page">
+		<div class="topnavlist justify-between">
+			<div class="topnav-item">
+				<a href="#"> <strong>＜</strong>供应热力合同</a>
+			</div>
+		</div>
+		<div class="topbg w-100" style="position: fixed; top: 42px; left: 0;">
+			<img src="/bootstrap/image/bg.png" alt="" class="w-100">
+		</div>
+		<div class="page-bot" style="position: relative;padding-bottom: 70px;">
+			<div class="shadow-all">
+				<div class="shadowbox-list w-100 box-sizing flex-column">
+					<form id="formId" action="">
+						<input id="customdes" name="customdes" style="display: none" type="text">
+						<input name="customcode" id="customcode" style="display: none" th:type="text" th:value="${heatingCard}">
+						<input name="contractfilename" id="contractfilename" style="display: none" type="text"  >
+						<li class="" >
+							<div class="tit-li" style="font-size: 20px; border-left: 3px solid #45A4EB; font-weight: 700; line-height: 32px; height: 32px; padding-left: 10px; margin: 7px 0;">
+								新城热力中心
+							</div>
+						</li>
+						<li>
+							<div class="list-left">电话号码</div>
+							<div class="list-right" style="min-width: 60%;">
+								<input id="telephone" name="telephone"  type="text" class="noborder" placeholder="请输入电话号码">
+							</div>
+						</li>
+						<li>
+							<div class="list-left">身份证件</div>
+							<div class="list-right" style="min-width: 60%;">
+								<input id="identitycode" name="identitycode" type="text" class="noborder" placeholder="身份证">
+							</div>
+						</li>
+						<li>
+							<div class="list-left">签字图片</div>
+							<div class="list-right" style="min-width: 60%;">
+								<img class="signImage" id="sign_images" src="/bootstrap/image/jiaobig.png" alt="" style="float: right; height: 42px; ">
+							</div>
+						</li>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="bot-wrap-btns justify-between">
+			<button class="bot-btn-item" type="button" onclick="getContract()">查看合同</button>
+			<button class="bot-btn-item" type="button" onclick="sign()">签字</button>
+		</div>
+		<div class="bot-wrap">
+			<button class="bot-btn" type="button" onclick="submitSign()">提交</button>
+		</div>
+	</div>
+	<script src="/bootstrap/js/jquery2.2.4.min.js"></script>
+	<script src="/bootstrap/layer/layer.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			getDetails($("#customcode").val());
+		})
+
+		function sign(){
+			var index = layer.open({
+				type: 2,
+				title:"签字",
+				area: ['100%', '100%'],
+				content: ['/sign/getSignPage', 'no'] //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+			});
+		}
+		function getContract() {
+			var index = layer.open({
+				type: 2,
+				title:"热力合同",
+				area: ['100%', '100%'],
+				content: ['/sign/getHeatContract'] //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+			});
+		}
+		function getDetails(heatingCard) {
+			$.ajax({
+				url:"/sign/getDetailsByHeatingCard/"+heatingCard,
+				type:"get",
+				Accept:"html/text;chatset=utf-8",
+				contentType:false,
+				success: function (data) {
+					console.log(data);
+					var json_data = $.parseJSON(data);
+					var json_array = json_data.RESULT_DATA;
+					$("#telephone").val(json_array[0].Telephone);
+					$("#identitycode").val(json_array[0].IdentityCode );
+					$("#customdes").val(json_array[0].CustomDes);
+
+					console.log(data);
+				}, error: function () {
+					console.log("上传失败！");
+				}
+			})
+		}
+
+		function submitSign() {
+			var fields = $('#formId').serializeArray();
+			var obj = {}; //声明一个对象
+			$.each(fields, function(index, field) {
+				obj[field.name] = field.value; //通过变量，将属性值，属性一起放到对象中
+			})
+			console.log(obj)
+			$.ajax({
+				url:"/sign/updateDetailsByHeatingCard/",
+				type:"put",
+				dataType: "json",
+				contentType: "application/json;charset=utf8",
+				data: JSON.stringify(obj),
+				success: function (data) {
+					if(data.RESULT_DATA[0].Flag == 1){
+						layer.msg("保存成功！");
+					}else{
+						layer.msg("保存失败！");
+					}
+				}, error: function () {
+					console.log("提交失败！");
+				}
+			})
+		}
+
+	</script>
+</body>
+</html>

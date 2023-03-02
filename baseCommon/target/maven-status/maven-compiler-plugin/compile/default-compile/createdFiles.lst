@@ -1,0 +1,14 @@
+com\baseCommon\service\BaseService.class
+com\baseCommon\util\WebUtils.class
+com\baseCommon\handler\BaseExceptionHandler.class
+com\baseCommon\controller\BaseController.class
+com\baseCommon\entity\PageResult.class
+com\baseCommon\readPropFile\PropertiesUtils.class
+com\baseCommon\customCondition\DefaultLoadCondition.class
+com\baseCommon\dao\BaseDao.class
+com\baseCommon\dao\BaseDaoImpl.class
+com\baseCommon\readPropFile\ReadProp.class
+com\baseCommon\entity\Result.class
+com\baseCommon\exception\CommonException.class
+com\baseCommon\entity\ResultCode.class
+com\baseCommon\jwt\JwtUtil.class

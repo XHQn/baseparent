@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>手写签名</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+        <style>
+            .divBoom {
+                position: absolute;
+                width: 60px;
+                height: 98%;
+                left: 0px;
+                background: #FBFBFB;
+            }
+            .divRight{
+                text-align: center;
+                position: absolute;
+                width: 60px;
+                height: 98%;
+                right: 0px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #FBFBFB;
+            }
+            .cz{
+                height: 40px;
+                width: 60px;
+                background: #f8f8f8;
+                color: #5d5d5d;
+                border: 1px solid #DCDCDC;
+                margin: 20px 0px 20px 0px;
+                -webkit-transform: rotate(90deg);
+                -moz-transform: rotate(90deg);
+                -o-transform: rotate(90deg);
+                -ms-transform: rotate(90deg);
+                transform: rotate(90deg);
+            }
+            .sxb{
+                color: #5d5d5d;
+                -webkit-transform: rotate(90deg);
+                -moz-transform: rotate(90deg);
+                -o-transform: rotate(90deg);
+                -ms-transform: rotate(90deg);
+                transform: rotate(90deg);
+            }
+            .tj{
+                height: 40px;
+                width: 60px;
+                background: #018cf5;
+                color:#ffffff;
+                margin-top: 20px;
+                border: 1px solid #007ae2;
+                -webkit-transform: rotate(90deg);
+                -moz-transform: rotate(90deg);
+                -o-transform: rotate(90deg);
+                -ms-transform: rotate(90deg);
+                transform: rotate(90deg);
+            }
+            .canvas{
+                position: absolute;
+            }
+        </style>
+    </head>
+<body style="margin: 0px !important;">
+    <div class="canvas">
+        <canvas id="canvas" ></canvas>
+    </div>
+    <div class="divBoom">
+        <button class="cz" onclick="reset()">重写</button>
+        <button class="tj" onclick="test()">保存</button>
+    </div>
+
+    <div class="divRight" >
+        <span class="sxb">手写板</span>
+    </div>
+
+    <script src="/bootstrap/js/dyCanvas.min.js"></script>
+    <script src="/bootstrap/js/jquery.min.js"></script>
+    <script src="/bootstrap/layer/layer.js"></script>
+<script>
+    var width = $(document.body).width();
+    var height = $(document).height();
+    document.getElementById("canvas").width = width;
+    document.getElementById("canvas").height = height;
+
+    var canvas = document.getElementById('canvas');
+    var pen = canvas.getContext("2d");
+    var dyCanvas = new DyCanvas({
+        el: 'canvas',
+        color: '#000',
+        bgColor: '#ffffff',
+        lineWidth: 8,
+        brush: true,
+        height:100,
+        width:100
+    });
+    dyCanvas.initCvs();
+    var pen = canvas.getContext("2d");
+    //提交按钮
+    function test() {
+        canvas.toBlob(function (result) {
+            var form=new FormData();
+            form.append("signFile",result);
+            ajax(form);
+        })
+    }
+
+    function reset(){
+        pen.clearRect(0, 0, width, height);
+    }
+
+    function ajax(formData) {
+        layer.load(1);
+        $.ajax({
+            url:"/sign/uploadSign",
+            type:"post",
+            Accept:"html/text;chatset=utf-8",
+            contentType:false,
+            data:formData,
+            processData:false,
+            success: function (data) {
+                pen.clearRect(0, 0, width, height);
+                parent.$("#sign_images").attr("src","/sign/downloadFile?filePathName=" + data.object);
+                parent.$("#contractfilename").val(data.object);
+                parent.layer.closeAll();
+            }, error: function () {
+                layer.msg("上传失败，关闭签名页面。")
+                console.log("上传失败！");
+            }
+        })
+    }
+</script>
+</body>
+</html>

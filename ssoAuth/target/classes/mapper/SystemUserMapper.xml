@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auth.mapper.SystemUserMapper">
+    <select id="selectUserWithRole" resultMap="userRoleDTO" parameterType="java.lang.String">
+        SELECT system_user.*,
+               system_user_role.role_id,
+                system_role.name,
+                system_role.description,
+                system_role.company_id
+        FROM
+             system_user_role,system_user,system_role
+        WHERE
+              system_user_role.user_id = system_user.id
+          AND
+              system_role.id=system_user_role.role_id
+            AND
+              system_user_role.user_id =#{userId}
+    </select>
+    <resultMap id="userRoleDTO" type="com.auth.pojo.UserRoleDTO">
+        <result property="id" column="id"></result>
+        <result property="loginname" column="loginname"></result>
+        <result property="username" column="username"></result>
+
+        <collection property="systemRoleList" ofType="com.auth.pojo.SystemRole" javaType="java.util.List">
+            <result property="id" column="role_id"></result>
+            <result property="name" column="name"></result>
+            <result property="description" column="description"></result>
+            <result property="companyId" column="company_id"></result>
+        </collection>
+    </resultMap>
+</mapper>
